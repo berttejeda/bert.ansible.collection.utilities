@@ -1,0 +1,13 @@
+namespace: berttejeda
+name: utilities
+version: 0.0.3
+readme: README.md
+authors:
+  - Bert Tejeda (https://github.com/berttejeda)
+description: null
+license_file: LICENSE
+tags: [inventory]
+repository: https://github.com/berttejeda/bert.ansible.collection.utilities.git
+build_ignore:
+  - '*inventory.yaml'
+  - '*inventory.yml'
