@@ -280,12 +280,12 @@ class InventoryGenerator(object):
                 host_data['primary_group'] = primary_group
 
             host_data['hostname'] = hostname_short
-            # Add more metadata
-            host_data['fqdn'] = hostname
+            # Add more metadata            
             host_data['definition_file'] = definition_file
             host_data['default_group_path'] = default_group_path
             host_data['site_directory'] = self.site_directory
             host_data['environment_domain'] = self.environment_domain
+            host_data['ansible_host_fqdn'] = hostname
             host_data['ansible_host'] = hostname
             host_data = self.merge(host_data, definition_file_vars)
             ansible_real_host = host_data.get('ansible_real_host')
