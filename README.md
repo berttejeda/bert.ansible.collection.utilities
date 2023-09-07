@@ -7,4 +7,4 @@ useful in my management of modern IT infrastructure.
 
 # Dynamic Inventory - file system
 
-Documentation can be found in the [README](plugins/README.md)
+Documentation can be found in the [README](https://github.com/berttejeda/bert.ansible.collection.utilities/blob/main/plugins/README.md)
