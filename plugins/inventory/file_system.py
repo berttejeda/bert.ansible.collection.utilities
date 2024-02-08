@@ -43,7 +43,7 @@ DOCUMENTATION = r'''
 EXAMPLES = r'''
 # In-line OS/Subgroup maps
 plugin: file_system
-environment_domain: /some/site
+environment_domain: contoso.com
 os_class_map:
   wl08:
     - wl08: Windows 8 Laptop
@@ -88,7 +88,7 @@ sub_group_map:
 
 # External OS/Subgroup maps
 plugin: file_system
-environment_domain: /some/site
+environment_domain: contoso.com
 os_class_map: /some/path/os_class_map.yaml
 sub_group_map: /some/path/sub_group_map.yaml
 
@@ -112,7 +112,7 @@ logger.addHandler(streamhandler)
 
 
 def read_yaml(y):
-    yaml_content = yaml.load(y, yaml.Loader)
+    yaml_content = yaml.safe_load(y)
     return yaml_content
 
 
@@ -275,6 +275,7 @@ class InventoryGenerator(object):
                                                os_class == k]
                 host_data['sub_groups'] = [list(g.keys())[0] for k, v in self.sub_group_map.items() for g in v if
                                            sub_group == k]
+                host_data['extra_host_groups'] = definition_file_vars.get('extra_hostgroups',[])
                 host_data['sub_group_names'] = [list(g.values())[0] for k, v in self.sub_group_map.items() for g in v if
                                                 sub_group == k]
                 host_data['primary_group'] = primary_group
@@ -392,6 +393,13 @@ class InventoryModule(BaseInventoryPlugin):
                 sub_group_inv_name = self.inventory.add_group(sub_group)
                 self.inventory.add_child(sub_group_inv_name, hostname_inv_obj)
                 self.inventory.add_child(root_group_name, sub_group_inv_name)
+
+            extra_host_groups = hostname_data.get('extra_host_groups',[])
+            if type(extra_host_groups) == list:
+              for extra_host_group in extra_host_groups:
+                  extra_host_group_inv_name = self.inventory.add_group(extra_host_group)
+                  self.inventory.add_child(extra_host_group_inv_name, hostname_inv_obj)
+                  self.inventory.add_child(root_group_name, extra_host_group_inv_name)
 
             os_classes = hostname_data['os_classes']
             for os_class in os_classes:

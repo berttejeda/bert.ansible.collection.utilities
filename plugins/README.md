@@ -6,6 +6,11 @@ The file system dynamic inventory allows you to define
 ansible hosts as yaml files organized into folders
 that represent their primary host groups.
 
+It also derives additional host groups based on 
+regular expressions based on OS class and naming
+convention (see [os_class_map]
+(#os_class_map) and [sub_group_map](#sub_group_map)).
+
 It expects the following directory structure:
 
 ```bash  
@@ -19,9 +24,11 @@ It expects the following directory structure:
 
 ## The inventory file
 
+Below is the structure of a sample inventory file:
+
 ```yaml
 plugin: berttejeda.utilities.file_system
-environment_domain: {{ site_domain }}
+environment_domain: {{ site_domain }} # e.g. contoso.com
 #############################################
 ####    Host OS Class Map                ####
 #### Map a given host to additional host #### 
@@ -41,7 +48,8 @@ sub_group_map: path/to/sub_group_map.yaml
 
 ### environment_domain
 
-The environment domain specifies the ansible host suffix.
+The environment domain specifies the ansible host suffix, 
+e.g. `contoso.com`, `example.com`, etc
 
 ### os_class_map
 
@@ -352,6 +360,30 @@ but also at the definition level via the `set_facts` directive.
 During the dynamic inventory run phase, 
 any facts declared as above will be made available 
 as hostvars.
+
+# The ansible_controller host group
+
+If the definition file is named `localhost.yaml`, 
+the inventory plugin will interpret this special
+file as the ansible_controller, and will
+set appropriate attributes for it.
+
+See the `ansible-inventory` output from above.
+
+# Extra Host Groups
+
+You can add a host to extra host groups by declaring the 
+fact `extra_hostgroups` with a list of additional host groups, e.g.
+
+```yaml
+- name: Set Fact | user_data
+  set_fact:
+    extra_host_groups:
+      - extra_host_group_1
+      - extra_host_group_2
+      - web_servers
+      - app_servers
+```
 
 # Installation
 
