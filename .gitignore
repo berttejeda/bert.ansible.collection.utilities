@@ -20,6 +20,9 @@ tramp
 .org-id-locations
 *_archive
 
+# Archives
+*.gz
+
 # flymake-mode
 *_flymake.*
 
